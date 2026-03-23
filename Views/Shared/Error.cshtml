@@ -1,0 +1,58 @@
+@model ErrorViewModel
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="container-fluid py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card" style="border-color: rgba(255, 0, 85, 0.3);">
+                <div class="card-header border-0 py-4" style="background: rgba(255, 0, 85, 0.1);">
+                    <h2 class="mb-0" style="color: var(--danger-color);">
+                        <i class="bi bi-exclamation-triangle me-2"></i>SYSTEM ERROR
+                    </h2>
+                </div>
+                <div class="card-body p-4">
+                    <h3 style="color: var(--danger-color);">An error occurred while processing your request.</h3>
+                    
+                    @if (Model?.ShowRequestId ?? false)
+                    {
+                        <p class="text-secondary">
+                            <strong>Request ID:</strong> <code style="color: var(--neon-cyan);">@Model.RequestId</code>
+                        </p>
+                    }
+
+                    <hr style="border-color: rgba(255, 0, 85, 0.2);" />
+                    
+                    <h4 style="color: var(--neon-cyan);">What can you do?</h4>
+                    <ul class="text-secondary">
+                        <li>Try refreshing the page</li>
+                        <li>Go back to the <a asp-controller="Home" asp-action="Index" style="color: var(--neon-green);">Home page</a></li>
+                        <li>Contact support if the problem persists</li>
+                    </ul>
+
+                    <div class="mt-4">
+                        <a asp-controller="Home" asp-action="Index" class="btn" style="background: var(--neon-cyan); color: #000;">
+                            <i class="bi bi-house me-1"></i>Home
+                        </a>
+                        <button onclick="history.back()" class="btn ms-2" style="background: rgba(160, 160, 192, 0.2); color: var(--text-secondary); border: 1px solid rgba(160, 160, 192, 0.3);">
+                            <i class="bi bi-arrow-left me-1"></i>Back
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .glass-card {
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+    </style>
+}

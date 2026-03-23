@@ -1,0 +1,145 @@
+@model TradeRequest
+
+@{
+    ViewData["Title"] = "Trade Request Details";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="glass-card">
+                <div class="card-header border-0 py-4" style="background: rgba(0, 245, 255, 0.1);">
+                    <h3 class="mb-0" style="color: var(--neon-cyan);">
+                        <i class="bi bi-info-circle me-2"></i>TRANSFER DETAILS
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 style="color: var(--neon-cyan);">Request Information</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-secondary">Trade ID:</td>
+                                    <td><code style="color: var(--neon-cyan);">@Model.TradeId</code></td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Status:</td>
+                                    <td>
+                                        @{
+                                            var (bgColor, textColor) = Model.Status switch
+                                            {
+                                                TradeStatus.Pending => ("rgba(255, 0, 255, 0.2)", "var(--neon-magenta)"),
+                                                TradeStatus.Accepted => ("rgba(0, 255, 136, 0.2)", "var(--neon-green)"),
+                                                TradeStatus.Rejected => ("rgba(255, 0, 85, 0.2)", "var(--danger-color)"),
+                                                TradeStatus.Completed => ("rgba(0, 245, 255, 0.2)", "var(--neon-cyan)"),
+                                                _ => ("rgba(160, 160, 192, 0.2)", "var(--text-secondary)")
+                                            };
+                                        }
+                                        <span class="badge" style="background: @bgColor; color: @textColor;">
+                                            @Model.Status
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">Requested At:</td>
+                                    <td class="text-white">@Model.RequestedAt.ToString("g")</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 style="color: var(--neon-cyan);">Nodes</h5>
+                            <table class="table table-borderless">
+                                <tr>
+                                    <td class="text-secondary">From:</td>
+                                    <td class="text-white">@Model.RequestingStudent?.Name</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-secondary">To:</td>
+                                    <td class="text-white">@Model.TargetStudent?.Name</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <div class="glass-card" style="border-color: rgba(0, 255, 136, 0.2);">
+                                <div class="card-body p-3">
+                                    <h6 style="color: var(--neon-green);">Requested Skill</h6>
+                                    <p class="fw-bold text-white mb-1">@Model.RequestedTalent?.TalentName</p>
+                                    <p class="small text-secondary mb-2">@Model.RequestedTalent?.Description</p>
+                                    <span class="badge" style="background: rgba(0, 255, 136, 0.2); color: var(--neon-green);">Level @Model.RequestedTalent?.ProficiencyLevel</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="glass-card" style="border-color: rgba(255, 136, 0, 0.2);">
+                                <div class="card-body p-3">
+                                    <h6 style="color: var(--neon-orange);">Offered Skill</h6>
+                                    <p class="fw-bold text-white mb-1">@Model.OfferedTalent?.TalentName</p>
+                                    <p class="small text-secondary mb-2">@Model.OfferedTalent?.Description</p>
+                                    <span class="badge" style="background: rgba(255, 136, 0, 0.2); color: var(--neon-orange);">Level @Model.OfferedTalent?.ProficiencyLevel</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!string.IsNullOrEmpty(Model.Message))
+                    {
+                        <div class="mb-4">
+                            <h5 style="color: var(--neon-cyan);">Message</h5>
+                            <div class="alert" style="background: rgba(0, 245, 255, 0.1); border: 1px solid rgba(0, 245, 255, 0.3); border-radius: 12px; color: #fff;">
+                                @Model.Message
+                            </div>
+                        </div>
+                    }
+
+                    <div class="d-flex justify-content-between mt-4">
+                        <a asp-action="Index" class="btn" style="background: rgba(160, 160, 192, 0.2); color: var(--text-secondary); border: 1px solid rgba(160, 160, 192, 0.3);">
+                            <i class="bi bi-arrow-left me-1"></i>Back
+                        </a>
+
+                        @if (Model.Status == TradeStatus.Pending)
+                        {
+                            <div>
+                                <form asp-action="Accept" asp-route-id="@Model.TradeId" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn" style="background: var(--neon-green); color: #000;">Accept</button>
+                                </form>
+                                <form asp-action="Reject" asp-route-id="@Model.TradeId" method="post" class="d-inline ms-2">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn" style="background: var(--danger-color); color: #fff;">Reject</button>
+                                </form>
+                            </div>
+                        }
+                        else if (Model.Status == TradeStatus.Accepted)
+                        {
+                            <form asp-action="Complete" asp-route-id="@Model.TradeId" method="post">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn" style="background: var(--neon-cyan); color: #000;">
+                                    <i class="bi bi-check-all me-1"></i>Complete
+                                </button>
+                            </form>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .glass-card {
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .table td {
+            border-top: none;
+        }
+    </style>
+}

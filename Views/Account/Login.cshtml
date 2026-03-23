@@ -1,0 +1,70 @@
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="glass-card">
+            <div class="card-header border-0 py-4 text-center" style="background: rgba(0, 245, 255, 0.1);">
+                <h2 style="color: var(--neon-cyan);">
+                    <i class="bi bi-shield-lock me-2"></i>ACCESS PORTAL
+                </h2>
+            </div>
+            <div class="card-body p-4">
+                <form asp-action="Login" method="post">
+                    <div class="form-group mb-4">
+                        <label for="studentId" class="form-label" style="color: var(--neon-cyan);">
+                            <i class="bi bi-person-badge me-1"></i>Select Your Profile
+                        </label>
+                        <select id="studentId" name="studentId" class="form-control" asp-items="ViewBag.Students"
+                                style="background: rgba(0, 245, 255, 0.05); border: 1px solid rgba(0, 245, 255, 0.3); color: #fff;">
+                            <option value="">-- Choose a node --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group mb-4">
+                        <button type="submit" class="btn w-100" style="background: var(--neon-cyan); color: #000;">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>Connect
+                        </button>
+                    </div>
+                    
+                    <div class="text-center">
+                        <a asp-action="Register" style="color: var(--neon-green);">
+                            <i class="bi bi-person-plus me-1"></i>Don't have an account? Register
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .glass-card {
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .form-control {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background: rgba(0, 245, 255, 0.1);
+            border-color: var(--neon-cyan);
+            box-shadow: 0 0 20px rgba(0, 245, 255, 0.3);
+            color: #fff;
+        }
+        
+        .form-select option {
+            background: #0a0a14;
+            color: #fff;
+        }
+    </style>
+}

@@ -1,0 +1,95 @@
+@model Talent
+
+@{
+    ViewData["Title"] = "Edit Talent";
+}
+
+<div class="container-fluid py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="glass-card" style="border-color: rgba(255, 136, 0, 0.2);">
+                <div class="card-header border-0 py-4" style="background: rgba(255, 136, 0, 0.1);">
+                    <h3 class="mb-0" style="color: var(--neon-orange);">
+                        <i class="bi bi-pencil-square me-2"></i>MODIFY SKILL
+                    </h3>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Edit" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@Model.TalentId" />
+                        
+                        <div class="mb-4">
+                            <label class="form-label" style="color: var(--neon-orange);">
+                                <i class="bi bi-hash me-1"></i>SKILL ID
+                            </label>
+                            <input type="text" class="form-control" value="@Model.TalentId" disabled readonly
+                                   style="background: rgba(255, 136, 0, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); color: #fff;">
+                            <div class="form-text text-secondary">Unique identifier (cannot be changed)</div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="name" class="form-label" style="color: var(--neon-orange);">
+                                <i class="bi bi-star me-1"></i>SKILL NAME
+                            </label>
+                            <input type="text" class="form-control" id="name" name="name" 
+                                   value="@Model.TalentName" required maxlength="100"
+                                   style="background: rgba(255, 136, 0, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); color: #fff;">
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="description" class="form-label" style="color: var(--neon-orange);">
+                                <i class="bi bi-file-text me-1"></i>DESCRIPTION
+                            </label>
+                            <textarea class="form-control" id="description" name="description" rows="3"
+                                      style="background: rgba(255, 136, 0, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); color: #fff;">@Model.Description</textarea>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="proficiencyLevel" class="form-label" style="color: var(--neon-orange);">
+                                <i class="bi bi-bar-chart me-1"></i>PROFICIENCY LEVEL (1-10)
+                            </label>
+                            <input type="number" class="form-control" id="proficiencyLevel" name="proficiencyLevel" 
+                                   value="@Model.ProficiencyLevel" min="1" max="10" required
+                                   style="background: rgba(255, 136, 0, 0.05); border: 1px solid rgba(255, 136, 0, 0.3); color: #fff;">
+                            <div class="form-text text-secondary">Rate your skill level from 1 (beginner) to 10 (expert)</div>
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                            <a asp-action="Index" class="btn" style="background: rgba(160, 160, 192, 0.2); color: var(--text-secondary); border: 1px solid rgba(160, 160, 192, 0.3);">
+                                <i class="bi bi-x-circle me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn" style="background: var(--neon-orange); color: #000;">
+                                <i class="bi bi-check-circle me-1"></i>Save
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .glass-card {
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 136, 0, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+        }
+        
+        .form-control {
+            border-radius: 12px;
+            padding: 0.75rem 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            background: rgba(255, 136, 0, 0.1);
+            border-color: var(--neon-orange);
+            box-shadow: 0 0 20px rgba(255, 136, 0, 0.3);
+            color: #fff;
+        }
+    </style>
+}

@@ -1,0 +1,229 @@
+@model IEnumerable<Talent>
+
+@{
+    ViewData["Title"] = "My Talents";
+}
+
+<div class="container-fluid py-4">
+    <!-- Futuristic Page Header -->
+    <div class="row mb-4 align-items-center">
+        <div class="col-md-8">
+            <h1 class="display-5 fw-bold mb-2 neon-text" style="color: var(--neon-green);">
+                <i class="bi bi-stars me-3"></i>SKILL MATRIX
+            </h1>
+            <p class="text-secondary fs-5">
+                <i class="bi bi-cpu me-2"></i>Your registered abilities and proficiency levels
+            </p>
+        </div>
+        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+            <a asp-action="Create" class="btn btn-lg" style="background: var(--neon-green); color: #000;">
+                <i class="bi bi-plus-circle me-2"></i>UPLOAD SKILL
+            </a>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="glass-card animate-glow">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="flex-shrink-0">
+                        <div class="stat-icon-wrapper" style="background: rgba(0, 255, 136, 0.1);">
+                            <i class="bi bi-stars" style="color: var(--neon-green); font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                        <h6 class="text-uppercase mb-2" style="color: var(--neon-green); letter-spacing: 2px; font-size: 0.75rem;">
+                            <i class="bi bi-database me-1"></i>Total Skills
+                        </h6>
+                        <h2 class="mb-0 fw-bold neon-text" style="color: var(--neon-green);">@Model.Count()</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card animate-glow">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="flex-shrink-0">
+                        <div class="stat-icon-wrapper" style="background: rgba(0, 245, 255, 0.1);">
+                            <i class="bi bi-graph-up" style="color: var(--neon-cyan); font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                        <h6 class="text-uppercase mb-2" style="color: var(--neon-cyan); letter-spacing: 2px; font-size: 0.75rem;">
+                            <i class="bi bi-speedometer me-1"></i>Avg Proficiency
+                        </h6>
+                        <h2 class="mb-0 fw-bold neon-text" style="color: var(--neon-cyan);">
+                            @(Model.Any() ? Model.Average(t => t.ProficiencyLevel).ToString("F1") : "0")
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Talents Table Card -->
+    <div class="glass-card">
+        <div class="card-header border-0 py-4" style="background: rgba(0, 255, 136, 0.1);">
+            <h5 class="mb-0" style="color: var(--neon-green);">
+                <i class="bi bi-list-stars me-2"></i>SKILL REGISTRY
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table mb-0">
+                    <thead>
+                        <tr>
+                            <th scope="col" class="px-4 py-4" style="color: var(--neon-green);">
+                                <i class="bi bi-hash me-1"></i>ID
+                            </th>
+                            <th scope="col" class="py-4" style="color: var(--neon-green);">
+                                <i class="bi bi-star me-1"></i>SKILL
+                            </th>
+                            <th scope="col" class="py-4" style="color: var(--neon-green);">
+                                <i class="bi bi-file-text me-1"></i>DESCRIPTION
+                            </th>
+                            <th scope="col" class="py-4 text-center" style="color: var(--neon-green);">
+                                <i class="bi bi-bar-chart me-1"></i>LEVEL
+                            </th>
+                            <th scope="col" class="text-center py-4" style="color: var(--neon-green);">
+                                <i class="bi bi-gear me-1"></i>OPERATIONS
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            int counter = 1;
+                            foreach (var talent in Model)
+                            {
+                                var (bgColor, textColor) = talent.ProficiencyLevel switch
+                                {
+                                    >= 8 => ("rgba(0, 255, 136, 0.2)", "var(--neon-green)"),
+                                    >= 5 => ("rgba(255, 136, 0, 0.2)", "var(--neon-orange)"),
+                                    _ => ("rgba(160, 160, 192, 0.2)", "var(--text-secondary)")
+                                };
+                                <tr class="align-middle">
+                                    <td class="px-4">
+                                        <span class="badge" style="background: rgba(0, 255, 136, 0.2); color: var(--neon-green);">@counter</span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="rounded-circle p-2 me-3" style="background: rgba(0, 255, 136, 0.1);">
+                                                <i class="bi bi-lightning-charge" style="color: var(--neon-green); font-size: 1.25rem;"></i>
+                                            </div>
+                                            <span class="fw-semibold text-white">@talent.TalentName</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="text-secondary">@(string.IsNullOrEmpty(talent.Description) ? "—" : talent.Description)</span>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex align-items-center justify-content-center">
+                                            <div class="progress flex-grow-1 me-2" style="height: 8px; width: 60px; background: rgba(0, 255, 136, 0.1);">
+                                                <div class="progress-bar" role="progressbar" 
+                                                     style="width: @(talent.ProficiencyLevel * 10)%; background: linear-gradient(90deg, var(--neon-green), var(--neon-cyan));"></div>
+                                            </div>
+                                            <span class="badge" style="background: @bgColor; color: @textColor;">@talent.ProficiencyLevel/10</span>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="btn-group" role="group">
+                                            <a asp-action="Edit" asp-route-id="@talent.TalentId" 
+                                               class="btn btn-sm" style="background: rgba(255, 136, 0, 0.2); color: var(--neon-orange); border: 1px solid var(--neon-orange);" title="Edit">
+                                                <i class="bi bi-pencil"></i>
+                                            </a>
+                                            <a asp-action="Delete" asp-route-id="@talent.TalentId" 
+                                               class="btn btn-sm" style="background: rgba(255, 0, 85, 0.2); color: var(--danger-color); border: 1px solid var(--danger-color);" title="Delete">
+                                                <i class="bi bi-trash"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                counter++;
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center py-5">
+                                    <div>
+                                        <i class="bi bi-stars d-block mb-3" style="font-size: 3rem; color: var(--neon-green); opacity: 0.3;"></i>
+                                        <p class="fs-5 mb-3 text-secondary">No skills registered in the matrix</p>
+                                        <a asp-action="Create" class="btn" style="background: var(--neon-green); color: #000;">
+                                            <i class="bi bi-plus-circle me-2"></i>UPLOAD FIRST SKILL
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .glass-card {
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 255, 136, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(0, 255, 136, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 255, 136, 0.2);
+        }
+        
+        .stat-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .table {
+            background: transparent;
+        }
+        
+        .table thead th {
+            background: rgba(0, 255, 136, 0.05);
+            border-bottom: 2px solid rgba(0, 255, 136, 0.3);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+        
+        .table tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(0, 255, 136, 0.1);
+        }
+        
+        .table tbody tr:hover {
+            background: rgba(0, 255, 136, 0.05);
+        }
+        
+        .table td {
+            border-top: none;
+            color: var(--text-primary);
+        }
+        
+        .animate-glow {
+            animation: cardGlow 3s ease-in-out infinite;
+        }
+        
+        @@keyframes cardGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 255, 136, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(0, 255, 136, 0.2); }
+        }
+    </style>
+}

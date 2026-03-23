@@ -1,0 +1,330 @@
+@model SkillSwap.Web.ViewModels.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid py-4">
+    <!-- Futuristic Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="glass-card p-4 position-relative overflow-hidden">
+                <div class="corner-decoration"></div>
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <div>
+                        <h1 class="display-6 fw-bold mb-2 neon-text" style="color: var(--neon-cyan);">
+                            <i class="bi bi-lightning-charge-fill me-2"></i>Welcome, @Model.Student.Name
+                        </h1>
+                        <p class="mb-0 text-secondary">
+                            <i class="bi bi-terminal me-2"></i><span style="color: var(--neon-green);">STATUS:</span> 
+                            <span class="text-success">ONLINE</span> | 
+                            <i class="bi bi-envelope me-2 ms-3"></i>@Model.Student.Email
+                        </p>
+                    </div>
+                    <div class="d-flex gap-2 mt-3 mt-md-0">
+                        <a class="btn btn-outline-light" asp-controller="Students" asp-action="Index">
+                            <i class="bi bi-people-fill me-1"></i>Network
+                        </a>
+                        <a class="btn btn-outline-light" asp-controller="Talents" asp-action="Index">
+                            <i class="bi bi-stars me-1"></i>Skills
+                        </a>
+                        <a class="btn btn-outline-light" asp-controller="Trades" asp-action="Index">
+                            <i class="bi bi-arrow-left-right me-1"></i>Trades
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Row with Animated Cards -->
+    <div class="row mb-4">
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="glass-card h-100 animate-glow">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="flex-shrink-0 position-relative">
+                        <div class="stat-icon-wrapper" style="background: rgba(0, 255, 136, 0.1);">
+                            <i class="bi bi-stars" style="color: var(--neon-green); font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                        <h6 class="text-uppercase mb-2" style="color: var(--neon-green); letter-spacing: 2px; font-size: 0.75rem;">
+                            <i class="bi bi-cpu me-1"></i>My Skills
+                        </h6>
+                        <h2 class="mb-0 fw-bold neon-text" style="color: var(--neon-green);">@Model.Talents.Count</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-3 mb-md-0">
+            <div class="glass-card h-100 animate-glow">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="flex-shrink-0">
+                        <div class="stat-icon-wrapper" style="background: rgba(0, 245, 255, 0.1);">
+                            <i class="bi bi-inbox-fill" style="color: var(--neon-cyan); font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                        <h6 class="text-uppercase mb-2" style="color: var(--neon-cyan); letter-spacing: 2px; font-size: 0.75rem;">
+                            <i class="bi bi-arrow-down-circle me-1"></i>Incoming
+                        </h6>
+                        <h2 class="mb-0 fw-bold neon-text" style="color: var(--neon-cyan);">@Model.IncomingRequests.Count</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="glass-card h-100 animate-glow">
+                <div class="card-body d-flex align-items-center p-4">
+                    <div class="flex-shrink-0">
+                        <div class="stat-icon-wrapper" style="background: rgba(255, 136, 0, 0.1);">
+                            <i class="bi bi-box-arrow-up-fill" style="color: var(--neon-orange); font-size: 2rem;"></i>
+                        </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                        <h6 class="text-uppercase mb-2" style="color: var(--neon-orange); letter-spacing: 2px; font-size: 0.75rem;">
+                            <i class="bi bi-arrow-up-circle me-1"></i>Outgoing
+                        </h6>
+                        <h2 class="mb-0 fw-bold neon-text" style="color: var(--neon-orange);">@Model.OutgoingRequests.Count</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Cards -->
+    <div class="row g-4">
+        <!-- My Talents Card -->
+        <div class="col-lg-4">
+            <div class="glass-card h-100">
+                <div class="card-header border-0 py-4 d-flex justify-content-between align-items-center" style="background: rgba(0, 255, 136, 0.1);">
+                    <h5 class="mb-0" style="color: var(--neon-green);">
+                        <i class="bi bi-stars me-2"></i>SKILL MATRIX
+                    </h5>
+                    <span class="badge" style="background: var(--neon-green); color: #000;">@Model.Talents.Count</span>
+                </div>
+                <div class="card-body p-4">
+                    @if (Model.Talents.Any())
+                    {
+                        <div class="talent-list">
+                            @foreach (var talent in Model.Talents.Take(5))
+                            {
+                                <div class="talent-item mb-3 p-3" style="background: rgba(0, 255, 136, 0.05); border-left: 3px solid var(--neon-green); border-radius: 8px;">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="fw-semibold text-white">@talent.TalentName</div>
+                                            <div class="small text-secondary">@(string.IsNullOrEmpty(talent.Description) ? "No description" : talent.Description)</div>
+                                        </div>
+                                        <span class="badge" style="background: rgba(0, 255, 136, 0.2); color: var(--neon-green);">@talent.ProficiencyLevel</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (Model.Talents.Count > 5)
+                        {
+                            <div class="text-center mt-4">
+                                <a asp-controller="Talents" asp-action="Index" class="text-decoration-none" style="color: var(--neon-green);">
+                                    <i class="bi bi-arrow-right-circle me-1"></i>View all @Model.Talents.Count skills
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-stars mb-3 d-block" style="font-size: 3rem; color: var(--neon-green); opacity: 0.3;"></i>
+                            <p class="text-secondary">No skills initialized</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer border-0 bg-transparent p-4">
+                    <a class="btn w-100" style="background: var(--neon-green); color: #000;" asp-controller="Talents" asp-action="Create">
+                        <i class="bi bi-plus-circle me-2"></i>ADD SKILL
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Incoming Requests Card -->
+        <div class="col-lg-4">
+            <div class="glass-card h-100">
+                <div class="card-header border-0 py-4 d-flex justify-content-between align-items-center" style="background: rgba(0, 245, 255, 0.1);">
+                    <h5 class="mb-0" style="color: var(--neon-cyan);">
+                        <i class="bi bi-inbox me-2"></i>INCOMING TRADES
+                    </h5>
+                    <span class="badge" style="background: var(--neon-cyan); color: #000;">@Model.IncomingRequests.Count</span>
+                </div>
+                <div class="card-body p-4">
+                    @if (Model.IncomingRequests.Any())
+                    {
+                        <div class="request-list">
+                            @foreach (var request in Model.IncomingRequests.Take(5))
+                            {
+                                <div class="request-item mb-3 p-3" style="background: rgba(0, 245, 255, 0.05); border-left: 3px solid var(--neon-cyan); border-radius: 8px;">
+                                    <div class="mb-2">
+                                        <div class="fw-semibold text-white">@request.RequestedTalent?.TalentName</div>
+                                        <div class="small text-secondary">From: <span style="color: var(--neon-cyan);">@request.RequestingStudent?.Name</span></div>
+                                    </div>
+                                    <div class="small text-secondary mb-2">Offered: @request.OfferedTalent?.TalentName</div>
+                                    @if (request.Status == TradeStatus.Pending)
+                                    {
+                                        <div class="d-flex gap-2 mt-2">
+                                            <form asp-controller="Trades" asp-action="Accept" asp-route-id="@request.TradeId" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm" style="background: var(--neon-green); color: #000;">
+                                                    <i class="bi bi-check-lg me-1"></i>Accept
+                                                </button>
+                                            </form>
+                                            <form asp-controller="Trades" asp-action="Reject" asp-route-id="@request.TradeId" method="post" class="d-inline">
+                                                @Html.AntiForgeryToken()
+                                                <button type="submit" class="btn btn-sm" style="background: transparent; border: 1px solid var(--danger-color); color: var(--danger-color);">
+                                                    <i class="bi bi-x-lg me-1"></i>Reject
+                                                </button>
+                                            </form>
+                                        </div>
+                                    }
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-inbox mb-3 d-block" style="font-size: 3rem; color: var(--neon-cyan); opacity: 0.3;"></i>
+                            <p class="text-secondary">No incoming trades</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer border-0 bg-transparent p-4">
+                    <a class="btn w-100" style="background: var(--neon-cyan); color: #000;" asp-controller="Trades" asp-action="Index">
+                        <i class="bi bi-arrow-right me-2"></i>VIEW TRADES
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Outgoing Requests Card -->
+        <div class="col-lg-4">
+            <div class="glass-card h-100">
+                <div class="card-header border-0 py-4 d-flex justify-content-between align-items-center" style="background: rgba(255, 136, 0, 0.1);">
+                    <h5 class="mb-0" style="color: var(--neon-orange);">
+                        <i class="bi bi-box-arrow-up me-2"></i>OUTGOING TRADES
+                    </h5>
+                    <span class="badge" style="background: var(--neon-orange); color: #000;">@Model.OutgoingRequests.Count</span>
+                </div>
+                <div class="card-body p-4">
+                    @if (Model.OutgoingRequests.Any())
+                    {
+                        <div class="request-list">
+                            @foreach (var request in Model.OutgoingRequests.Take(5))
+                            {
+                                <div class="request-item mb-3 p-3" style="background: rgba(255, 136, 0, 0.05); border-left: 3px solid var(--neon-orange); border-radius: 8px;">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <div class="fw-semibold text-white">@request.RequestedTalent?.TalentName</div>
+                                            <div class="small text-secondary">To: <span style="color: var(--neon-orange);">@request.TargetStudent?.Name</span></div>
+                                        </div>
+                                        <span class="badge" style="background: @(request.Status switch {
+                                            TradeStatus.Pending => "rgba(255, 136, 0, 0.2)",
+                                            TradeStatus.Accepted => "rgba(0, 255, 136, 0.2)",
+                                            TradeStatus.Rejected => "rgba(255, 0, 85, 0.2)",
+                                            TradeStatus.Completed => "rgba(0, 245, 255, 0.2)",
+                                            _ => "rgba(160, 160, 192, 0.2)"
+                                        }); color: @(request.Status switch {
+                                            TradeStatus.Pending => "var(--neon-orange)",
+                                            TradeStatus.Accepted => "var(--neon-green)",
+                                            TradeStatus.Rejected => "var(--danger-color)",
+                                            TradeStatus.Completed => "var(--neon-cyan)",
+                                            _ => "var(--text-secondary)"
+                                        });">
+                                            @request.Status
+                                        </span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        @if (Model.OutgoingRequests.Count > 5)
+                        {
+                            <div class="text-center mt-4">
+                                <a asp-controller="Trades" asp-action="Index" class="text-decoration-none" style="color: var(--neon-orange);">
+                                    <i class="bi bi-arrow-right-circle me-1"></i>View all @Model.OutgoingRequests.Count requests
+                                </a>
+                            </div>
+                        }
+                    }
+                    else
+                    {
+                        <div class="text-center py-5">
+                            <i class="bi bi-box-arrow-up mb-3 d-block" style="font-size: 3rem; color: var(--neon-orange); opacity: 0.3;"></i>
+                            <p class="text-secondary">No outgoing trades</p>
+                        </div>
+                    }
+                </div>
+                <div class="card-footer border-0 bg-transparent p-4">
+                    <a class="btn w-100" style="background: var(--neon-orange); color: #000;" asp-controller="Trades" asp-action="Create">
+                        <i class="bi bi-plus-circle me-2"></i>NEW TRADE
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .glass-card {
+            background: rgba(10, 10, 20, 0.7);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 245, 255, 0.2);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            border-color: rgba(0, 245, 255, 0.4);
+            box-shadow: 0 10px 40px rgba(0, 245, 255, 0.2);
+        }
+        
+        .stat-icon-wrapper {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .corner-decoration {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--neon-cyan), var(--neon-magenta), var(--neon-cyan));
+            animation: scanLine 3s linear infinite;
+        }
+        
+        @@keyframes scanLine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        .talent-item, .request-item {
+            transition: all 0.3s ease;
+        }
+        
+        .talent-item:hover, .request-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .animate-glow {
+            animation: cardGlow 3s ease-in-out infinite;
+        }
+        
+        @@keyframes cardGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(0, 245, 255, 0.1); }
+            50% { box-shadow: 0 0 40px rgba(0, 245, 255, 0.2); }
+        }
+    </style>
+}
