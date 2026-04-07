@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Services.Interfaces;
 using SkillSwap.Models;
 
-namespace SkillSwap.Web.Controllers
+namespace SkillSwap.Web.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
