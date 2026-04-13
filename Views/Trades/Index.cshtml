@@ -16,7 +16,7 @@
             </p>
         </div>
         <div class="col-md-4 text-md-end mt-3 mt-md-0">
-            <a asp-action="Create" class="btn btn-lg" style="background: var(--neon-orange); color: #000;">
+            <a asp-controller="Trades" asp-action="Create" class="btn btn-lg" style="background: var(--neon-orange); color: #000;">
                 <i class="bi bi-plus-circle me-2"></i>INITIATE TRADE
             </a>
         </div>
@@ -229,7 +229,7 @@
                         <div class="text-center py-5">
                             <i class="bi bi-box-arrow-up d-block mb-3" style="font-size: 3rem; color: var(--neon-orange); opacity: 0.3;"></i>
                             <p class="fs-5 mb-3 text-secondary">No outgoing transfers initiated</p>
-                            <a asp-action="Create" class="btn" style="background: var(--neon-orange); color: #000;">
+                            <a asp-controller="Trades" asp-action="Create" class="btn" style="background: var(--neon-orange); color: #000;">
                                 <i class="bi bi-plus-circle me-2"></i>INITIATE TRANSFER
                             </a>
                         </div>

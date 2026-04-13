@@ -7,6 +7,7 @@ using SkillSwap.Models;
 namespace SkillSwap.Web.Controllers.API
 {
     [ApiController]
+    [Route("api/talents")]
     [Route("api/[controller]")]
     [Authorize]
     public class TalentsApiController : ControllerBase
@@ -48,6 +49,7 @@ namespace SkillSwap.Web.Controllers.API
 
         // POST: api/TalentsApi
         [HttpPost]
+        [HttpPost("create")]
         public IActionResult CreateTalent([FromBody] CreateTalentRequest request)
         {
             if (!ModelState.IsValid)
@@ -67,7 +69,12 @@ namespace SkillSwap.Web.Controllers.API
                 return Unauthorized();
             }
 
-            var talent = _talentService.AddTalent(talentName.Trim(), request.Description?.Trim() ?? string.Empty, studentId);
+            var proficiencyLevel = request.ProficiencyLevel ?? 1;
+            var talent = _talentService.AddTalent(
+                talentName.Trim(),
+                request.Description?.Trim() ?? string.Empty,
+                studentId,
+                proficiencyLevel);
             return CreatedAtAction(nameof(GetTalentById), new { id = talent.TalentId }, talent);
         }
 
@@ -102,9 +109,10 @@ namespace SkillSwap.Web.Controllers.API
 
     public class CreateTalentRequest
     {
-        public string Name { get; set; }
-        public string TalentName { get; set; }
-        public string Description { get; set; }
+        public string? Name { get; set; }
+        public string? TalentName { get; set; }
+        public string? Description { get; set; }
+        public int? ProficiencyLevel { get; set; }
     }
 
     public class UpdateTalentRequest

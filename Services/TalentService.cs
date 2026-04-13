@@ -32,14 +32,17 @@ namespace SkillSwap.Services
             return e == null ? null : new Talent(e.TalentId, e.TalentName, e.Description, e.StudentId, e.ProficiencyLevel);
         }
 
-        public Talent AddTalent(string name, string description, Guid studentId)
+        public Talent AddTalent(string name, string description, Guid studentId, int proficiencyLevel = 1)
         {
+            if (proficiencyLevel < 1) proficiencyLevel = 1;
+            if (proficiencyLevel > 10) proficiencyLevel = 10;
+
             var entity = new TalentEntity { 
                 TalentId = Guid.NewGuid(), 
                 TalentName = name, 
                 Description = description, 
                 StudentId = studentId,
-                ProficiencyLevel = 1
+                ProficiencyLevel = proficiencyLevel
             };
             _context.Talents.Add(entity);
             _context.SaveChanges();

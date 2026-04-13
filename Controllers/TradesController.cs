@@ -1,3 +1,4 @@
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Services.Interfaces;
 using SkillSwap.Models;
@@ -52,12 +53,7 @@ namespace SkillSwap.Web.Controllers
             }
 
             var studentId = Guid.Parse(studentIdString);
-            var availableTalents = _talentService.GetAvailableTalentsForTrade(studentId);
-            
-            ViewBag.AvailableTalents = availableTalents;
-            ViewBag.MyTalents = _talentService.GetTalentsByStudent(studentId);
-            
-            return View();
+            return View(BuildTradeCreateViewModel(studentId));
         }
 
         // POST: Trades/Create
@@ -72,18 +68,66 @@ namespace SkillSwap.Web.Controllers
             }
 
             var studentId = Guid.Parse(studentIdString);
+            var vm = BuildTradeCreateViewModel(studentId);
 
-            if (ModelState.IsValid)
+            if (requestedTalentId == Guid.Empty || offeredTalentId == Guid.Empty)
             {
-                _tradeService.CreateTradeRequest(studentId, requestedTalentId, offeredTalentId, message);
-                return RedirectToAction(nameof(Index));
+                ModelState.AddModelError(string.Empty, "Select both the skill you want and the skill you offer.");
+                return View(vm);
             }
 
+            var offered = _talentService.GetTalentById(offeredTalentId);
+            if (offered == null || offered.StudentId != studentId)
+            {
+                ModelState.AddModelError(string.Empty, "You must offer one of your own skills.");
+                return View(vm);
+            }
+
+            var requested = _talentService.GetTalentById(requestedTalentId);
+            if (requested == null || requested.StudentId == studentId)
+            {
+                ModelState.AddModelError(string.Empty, "Choose a skill listed by another student.");
+                return View(vm);
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
+
+            try
+            {
+                _tradeService.CreateTradeRequest(studentId, requestedTalentId, offeredTalentId, message ?? string.Empty);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (ArgumentException ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+                return View(vm);
+            }
+        }
+
+        private TradeCreateViewModel BuildTradeCreateViewModel(Guid studentId)
+        {
             var availableTalents = _talentService.GetAvailableTalentsForTrade(studentId);
-            ViewBag.AvailableTalents = availableTalents;
-            ViewBag.MyTalents = _talentService.GetTalentsByStudent(studentId);
-            
-            return View();
+            var myTalents = _talentService.GetTalentsByStudent(studentId);
+
+            return new TradeCreateViewModel
+            {
+                AvailableTalents = availableTalents.Select(t => new TradeTalentPickOption
+                {
+                    TalentId = t.TalentId,
+                    TalentName = t.TalentName,
+                    ProficiencyLevel = t.ProficiencyLevel,
+                    OwnerName = _studentService.GetStudentById(t.StudentId)?.Name ?? "Unknown"
+                }).ToList(),
+                MyTalents = myTalents.Select(t => new TradeTalentPickOption
+                {
+                    TalentId = t.TalentId,
+                    TalentName = t.TalentName,
+                    ProficiencyLevel = t.ProficiencyLevel
+                }).ToList()
+            };
         }
 
         // POST: Trades/Accept/5

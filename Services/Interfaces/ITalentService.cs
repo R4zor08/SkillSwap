@@ -8,7 +8,7 @@ namespace SkillSwap.Services.Interfaces
     {
         IEnumerable<Talent> GetTalents();
         Talent? GetTalentById(Guid id);
-        Talent AddTalent(string name, string description, Guid studentId);
+        Talent AddTalent(string name, string description, Guid studentId, int proficiencyLevel = 1);
         void UpdateTalent(Guid id, string name, string description, int proficiencyLevel);
         void DeleteTalent(Guid id);
         IEnumerable<Talent> GetTalentsByStudent(Guid studentId);

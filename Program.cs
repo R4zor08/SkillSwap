@@ -1,5 +1,8 @@
+using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -19,7 +22,12 @@ if (string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("ASPNETCORE_URL
     builder.WebHost.UseUrls("http://localhost:5000");
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+var mvc = builder.Services.AddControllersWithViews();
+// Recompile .cshtml from disk when not in Production (fixes stale views; pairs with RazorCompileOnBuild=false).
+if (!builder.Environment.IsProduction())
+{
+    mvc.AddRazorRuntimeCompilation();
+}
 
 builder.Services.Configure<JwtSettings>(builder.Configuration.GetSection(JwtSettings.SectionName));
 var jwtSettings = builder.Configuration.GetSection(JwtSettings.SectionName).Get<JwtSettings>()
@@ -79,6 +87,22 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromMinutes(30);
     options.Cookie.HttpOnly = true;
     options.Cookie.IsEssential = true;
+    // After UseForwardedHeaders, Request.IsHttps matches the public ngrok URL (https).
+    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+});
+
+// ngrok (and similar tunnels) terminate TLS and forward http://localhost:5000 with X-Forwarded-* headers.
+// This makes Request.Scheme/Host, redirects, and link generation use https://*.ngrok-free.dev instead of localhost.
+builder.Services.Configure<ForwardedHeadersOptions>(options =>
+{
+    options.ForwardedHeaders = ForwardedHeaders.XForwardedFor
+        | ForwardedHeaders.XForwardedProto
+        | ForwardedHeaders.XForwardedHost;
+    options.ForwardLimit = 2;
+    options.KnownIPNetworks.Clear();
+    options.KnownProxies.Clear();
+    options.KnownProxies.Add(IPAddress.Loopback);
+    options.KnownProxies.Add(IPAddress.IPv6Loopback);
 });
 
 var app = builder.Build();
@@ -119,6 +143,9 @@ using (var scope = app.Services.CreateScope())
 }
 
 // Configure the HTTP request pipeline.
+// Run first so every later middleware (redirects, cookies, link generation) sees the public ngrok URL.
+app.UseForwardedHeaders();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();

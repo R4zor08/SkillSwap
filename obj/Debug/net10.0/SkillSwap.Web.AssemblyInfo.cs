@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SkillSwap.Web")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1379f5521f4a4d25d41895e33130f2b6b5823ec2")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+8f9c57477beca5e09056e077d47ac57e57c8e7ea")]
 [assembly: System.Reflection.AssemblyProductAttribute("SkillSwap.Web")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SkillSwap.Web")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
