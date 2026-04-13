@@ -1,3 +1,5 @@
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SkillSwap.Services.Interfaces;
 using SkillSwap.Models;
@@ -6,6 +8,7 @@ namespace SkillSwap.Web.Controllers.API
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class TalentsApiController : ControllerBase
     {
         private readonly ITalentService _talentService;
@@ -52,7 +55,19 @@ namespace SkillSwap.Web.Controllers.API
                 return BadRequest(ModelState);
             }
 
-            var talent = _talentService.AddTalent(request.Name, request.Description, request.StudentId);
+            var talentName = string.IsNullOrWhiteSpace(request.Name) ? request.TalentName : request.Name;
+            if (string.IsNullOrWhiteSpace(talentName))
+            {
+                return BadRequest(new { error = "name (or talentName) is required." });
+            }
+
+            var userIdRaw = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub");
+            if (!Guid.TryParse(userIdRaw, out var studentId))
+            {
+                return Unauthorized();
+            }
+
+            var talent = _talentService.AddTalent(talentName.Trim(), request.Description?.Trim() ?? string.Empty, studentId);
             return CreatedAtAction(nameof(GetTalentById), new { id = talent.TalentId }, talent);
         }
 
@@ -88,8 +103,8 @@ namespace SkillSwap.Web.Controllers.API
     public class CreateTalentRequest
     {
         public string Name { get; set; }
+        public string TalentName { get; set; }
         public string Description { get; set; }
-        public Guid StudentId { get; set; }
     }
 
     public class UpdateTalentRequest

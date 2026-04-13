@@ -25,7 +25,7 @@ namespace SkillSwap.Web.Controllers.API
         }
 
         // GET: api/StudentsApi/{id}
-        [HttpGet("{id}")]
+        [HttpGet("{id:guid}")]
         public IActionResult GetStudentById(Guid id)
         {
             var student = _studentService.GetStudentById(id);
@@ -50,9 +50,19 @@ namespace SkillSwap.Web.Controllers.API
         }
 
         // PUT: api/StudentsApi/{id}
-        [HttpPut("{id}")]
+        [HttpPut("{id:guid}")]
         public IActionResult UpdateStudent(Guid id, [FromBody] UpdateStudentRequest request)
         {
+            if (request == null)
+            {
+                return BadRequest();
+            }
+
+            if (id != request.StudentId)
+            {
+                return BadRequest(new { error = "Route id must match body studentId." });
+            }
+
             var student = _studentService.GetStudentById(id);
             if (student == null)
             {
@@ -64,7 +74,7 @@ namespace SkillSwap.Web.Controllers.API
         }
 
         // DELETE: api/StudentsApi/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete("{id:guid}")]
         public IActionResult DeleteStudent(Guid id)
         {
             var student = _studentService.GetStudentById(id);
@@ -87,6 +97,7 @@ namespace SkillSwap.Web.Controllers.API
 
     public class UpdateStudentRequest
     {
+        public Guid StudentId { get; set; }
         public string Name { get; set; }
         public string Email { get; set; }
     }
