@@ -27,12 +27,7 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
-}
-@media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+  font-size: 16px;
 }
 
 .border-top {
@@ -56,18 +51,6 @@ button.accept-policy {
 html {
   position: relative;
   min-height: 100%;
-}
-
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-}
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; /* Vertically center the text there */
 }
 
 /* Custom styles for SkillSwap */
@@ -165,12 +148,6 @@ body {
 
 .card:hover {
     transform: translateY(-5px);
-}
-
-/* Footer positioning */
-.footer {
-    position: relative;
-    width: 100%;
 }
 
 /* Gradient backgrounds */
@@ -305,6 +282,11 @@ body {
 
 /* Responsive adjustments */
 @media (max-width: 768px) {
+    /* Legacy sticky-footer margin exposes a light strip behind fixed themed footer */
+    body {
+        margin-bottom: 0 !important;
+    }
+
     .display-4 {
         font-size: 2rem;
     }
@@ -315,6 +297,19 @@ body {
     
     .btn {
         padding: 0.5rem 1rem;
+    }
+
+    /* Frosted glass reads as grey/white on iOS; use solid dark surface */
+    .glass-card {
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        background: rgba(18, 18, 30, 0.97);
+        border: 1px solid rgba(0, 245, 255, 0.28);
+    }
+
+    .list-group-item {
+        border-color: rgba(42, 42, 74, 0.95);
+        background: rgba(10, 10, 20, 0.75);
     }
 }
 

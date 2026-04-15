@@ -63,9 +63,11 @@ Controllers/
   StudentsApiController.cs
   TalentsApiController.cs
   TradesApiController.cs
+ AuthApiController.cs
  DashboardController.cs
  HomeController.cs
  LoginController.cs
+ SmsApiController.cs
  StudentsController.cs
  TalentsController.cs
  TradesController.cs
@@ -93,6 +95,7 @@ obj/Debug/net10.0/
  SkillSwap.Web.AssemblyInfo.cs
  SkillSwap.Web.GlobalUsings.g.cs
  SkillSwap.Web.RazorAssemblyInfo.cs
+Options/JwtSettings.cs
 Program.cs
 Requests/
  BaseController.cs
@@ -117,9 +120,13 @@ Services/
  AuthService.cs
  Interfaces/
   IAuthService.cs
+  IJwtTokenService.cs
+  ISmsService.cs
   IStudentService.cs
   ITalentService.cs
   ITradeService.cs
+ JwtTokenService.cs
+ SmsService.cs
  StudentService.cs
  TalentService.cs
  TradeService.cs
@@ -128,6 +135,7 @@ ViewModels/
  ErrorViewModel.cs
  LoginViewModel.cs
  RegisterViewModel.cs
+ TradeCreateViewModel.cs
  TradeIndexViewModel.cs
 
 [metadataReferences]
@@ -442,8 +450,9 @@ ViewModels/
  WindowsBase.dll
 <NUGET>/
  bcrypt.net-next/4.0.3/lib/net6.0/BCrypt.Net-Next.dll
+ microsoft.aspnetcore.authentication.jwtbearer/10.0.5/lib/net10.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
  microsoft.aspnetcore.mvc.razor.extensions/6.0.0/lib/netstandard2.0/Microsoft.AspNetCore.Mvc.Razor.Extensions.dll
- microsoft.aspnetcore.mvc.razor.runtimecompilation/8.0.0/lib/net8.0/Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.dll
+ microsoft.aspnetcore.mvc.razor.runtimecompilation/10.0.0/lib/net10.0/Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation.dll
  microsoft.aspnetcore.razor.language/6.0.0/lib/netstandard2.0/Microsoft.AspNetCore.Razor.Language.dll
  microsoft.codeanalysis.common/4.5.0/lib/netcoreapp3.1/Microsoft.CodeAnalysis.dll
  microsoft.codeanalysis.csharp/4.5.0/lib/netcoreapp3.1/Microsoft.CodeAnalysis.CSharp.dll
@@ -453,10 +462,17 @@ ViewModels/
  microsoft.entityframeworkcore.relational/8.0.0/lib/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
  microsoft.entityframeworkcore.sqlite.core/8.0.0/lib/net8.0/Microsoft.EntityFrameworkCore.Sqlite.dll
  microsoft.entityframeworkcore/8.0.0/lib/net8.0/Microsoft.EntityFrameworkCore.dll
- microsoft.extensions.dependencymodel/8.0.0/lib/net8.0/Microsoft.Extensions.DependencyModel.dll
+ microsoft.extensions.dependencymodel/10.0.0/lib/net10.0/Microsoft.Extensions.DependencyModel.dll
+ microsoft.identitymodel.abstractions/8.0.1/lib/net9.0/Microsoft.IdentityModel.Abstractions.dll
+ microsoft.identitymodel.jsonwebtokens/8.0.1/lib/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll
+ microsoft.identitymodel.logging/8.0.1/lib/net9.0/Microsoft.IdentityModel.Logging.dll
+ microsoft.identitymodel.protocols.openidconnect/8.0.1/lib/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+ microsoft.identitymodel.protocols/8.0.1/lib/net9.0/Microsoft.IdentityModel.Protocols.dll
+ microsoft.identitymodel.tokens/8.0.1/lib/net9.0/Microsoft.IdentityModel.Tokens.dll
  sqlitepclraw.bundle_e_sqlite3/2.1.6/lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll
  sqlitepclraw.core/2.1.6/lib/netstandard2.0/SQLitePCLRaw.core.dll
  sqlitepclraw.provider.e_sqlite3/2.1.6/lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll
+ system.identitymodel.tokens.jwt/8.0.1/lib/net9.0/System.IdentityModel.Tokens.Jwt.dll
 
 [analyzerReferences]
 <DOTNET>/packs/Microsoft.AspNetCore.App.Ref/10.0.5/analyzers/dotnet/cs/

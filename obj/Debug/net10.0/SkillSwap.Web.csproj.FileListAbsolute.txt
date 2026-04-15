@@ -568,8 +568,6 @@ C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\rjimswa.dswa.cache.js
 C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\rjsmrazor.dswa.cache.json
 C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\rjsmcshtml.dswa.cache.json
 C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\scopedcss\bundle\SkillSwap.Web.styles.css
-C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\compressed\lde6wjpv7j-{0}-mimq40n2ib-mimq40n2ib.gz
-C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\compressed\8004xez60n-{0}-hy10lwjvmb-hy10lwjvmb.gz
 C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\compressed\vf7gqtp6or-{0}-eulbooly46-eulbooly46.gz
 C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\staticwebassets.build.json
 C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\staticwebassets.build.json.cache
@@ -895,3 +893,5 @@ C:\Users\Admin\System Apps\SkillSwap.Web\bin\Debug\net10.0\refs\WindowsBase.dll
 c:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\SkillSwa.9A7A40BC.Up2Date
 c:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\SkillSwap.Web.genruntimeconfig.cache
 c:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\ref\SkillSwap.Web.dll
+C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\compressed\lde6wjpv7j-{0}-ffbirf5q4q-ffbirf5q4q.gz
+C:\Users\Admin\System Apps\SkillSwap.Web\obj\Debug\net10.0\compressed\8004xez60n-{0}-0mkgws48lt-0mkgws48lt.gz
